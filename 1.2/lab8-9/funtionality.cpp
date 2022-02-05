@@ -358,7 +358,7 @@ List* editCountry(List *bg)
 
         while(cr!=NULL)
         {
-            if(strcmp(cr -> country -> name, searchParam) == 0 || strcmp(cr -> country -> capital,searchParam) == 0)
+            if(strcmp(cr -> country -> name, searchParam) == 0 || strcmp(cr -> country -> capital, searchParam) == 0)
             {
                 showCountry(cr -> country);
                 delete[] cr->country;
@@ -372,6 +372,76 @@ List* editCountry(List *bg)
         }
 
         cout<<"Country was not found\n\n"<<endl;
+    }
+
+    return bg;
+}
+
+List* swapCountries(List *bg)
+{
+
+    if(bg == NULL)
+    {
+        cout<<"The list of countries is empty\n\n";
+    }
+    else
+    {
+        char firstCountry[50];
+        char secondCountry[50];
+        cout<<"Input first country name or capital name: ";
+        cin>>firstCountry;
+        cout<<"Input second country name or capital name: ";
+        cin>>secondCountry;
+        List *cr = bg;
+
+        List *fCountry = NULL;
+        List *sCountry = NULL;
+
+        while(cr -> next!=NULL)
+        {
+            if(strcmp(cr -> next -> country -> name, firstCountry) == 0 || strcmp(cr -> next -> country -> capital, firstCountry) == 0)
+            {
+                fCountry = cr;
+            }
+            if(strcmp(cr -> next -> country -> name, secondCountry) == 0 || strcmp(cr -> next -> country -> capital, secondCountry) == 0)
+            {
+                sCountry = cr;
+            }
+
+            cr = cr -> next;
+        }
+
+        if(fCountry!=NULL && sCountry!=NULL)
+        {
+            List *fTemp = fCountry -> next -> next;
+            cout<<"fTemp = "<<fTemp -> country -> name<<endl;
+            cout<<"fCountry -> next -> next = "<<fCountry -> next -> next -> country -> name<<endl;
+            List *sTemp = sCountry -> next -> next;
+            cout<<"sTemp = "<<sTemp -> country -> name<<endl;
+            cout<<"sCountry -> next -> next = "<<sCountry -> next -> next -> country -> name<<endl;
+
+            List *tTemp = fCountry -> next;
+            cout<<"tTemp = "<<tTemp -> country -> name<<endl;
+            cout<<"fCountry -> next = "<<fCountry -> next -> country -> name<<endl;
+            fCountry -> next = sCountry -> next;
+            cout<<"fCountry -> next = "<<fCountry -> next -> country -> name<<endl;
+            cout<<"sCountry -> next = "<<sCountry -> next -> country -> name<<endl;
+            sCountry -> next = tTemp;
+            cout<<"sCountry -> next = "<<sCountry -> next -> country -> name<<endl;
+            cout<<"tTemp = "<<tTemp -> country -> name<<endl;
+
+            fCountry -> next -> next = sTemp;
+            cout<<"fCountry -> next -> next = "<<fCountry -> next -> next -> country -> name<<endl;
+            cout<<"sTemp = "<<sTemp -> country -> name<<endl;
+            sCountry -> next -> next = fTemp;
+            cout<<"sCountry -> next -> next = "<<sCountry -> next -> next -> country -> name<<endl;
+            cout<<"fTemp = "<<fTemp -> country -> name<<endl;
+        }
+        else
+        {
+            cout<<"Countries were not found\n\n"<<endl;
+        }
+
     }
 
     return bg;

@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1644071256 source:e:\c_projects\1.2\lab8-9\lab8\funtionality.cpp
+	<iostream>
+	<iomanip>
+	<string.h>
+	"funtionality.h"
+
+1644071262 e:\c_projects\1.2\lab8-9\lab8\funtionality.h
+	<iostream>
+
+1644071256 source:e:\c_projects\1.2\lab8-9\lab8\main.cpp
+	<iostream>
+	<windows.h>
+	"funtionality.h"
+

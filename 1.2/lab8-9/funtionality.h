@@ -38,3 +38,4 @@ void showCountry(Country *cntr);
 
 List* editCountry(List *bg);
 
+List* swapCountries(List *bg);
