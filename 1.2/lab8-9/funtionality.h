@@ -2,8 +2,7 @@
 
 using namespace std;
 
-struct Country
-{
+struct Country {
     char name[50];
     char capital[50];
     int area;
@@ -11,31 +10,45 @@ struct Country
     int grossDomesticProduct;
 };
 
-struct List
-{
+struct List {
     struct Country *country;
     List *next;
 };
 
-List* createList();
-List* addCountry(List *bg);
-Country* inputCountryData();
-List *getLastCountry(List *bg);
+List *createList();
+
+List *addCountry(List *bg);
+
+Country *inputCountryData();
+
 List *getPenultimateCountry(List *bg);
+
 int getLength(List *bg);
 
-List* addAtPosition(List *bg);
-List* addAtFirstPosition(List *bg, struct Country *country);
+List *addAtPosition(List *bg);
+
+List *addAtFirstPosition(List *bg, struct Country *country);
 
 void showCountries(List *cr);
 
-List* deleteCountry(List *bg);
+List *deleteCountry(List *bg);
 
-void getAdressOfTheLastElement(List *bg);
+void getAddressOfTheLastElement(List *bg);
 
 void findCountry(List *bg);
+
 void showCountry(Country *cntr);
 
-List* editCountry(List *bg);
+List *editCountry(List *bg);
 
-List* swapCountries(List *bg);
+List *swapCountries(List *bg);
+
+List *split(List *&bg, List *&bg2);
+
+List *selectSplitList(List *&bg, List *&bg2);
+
+List *unite(List *&bg, List *&bg2);
+
+void eliminateCountries(List *&bg, List *&bg2);
+
+void eliminateList(List *&bg);

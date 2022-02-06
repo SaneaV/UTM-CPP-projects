@@ -7,6 +7,7 @@ int main() {
     bool isActive = true;
     int choice;
     List *bg = nullptr;
+    List *bg2 = nullptr;
 
     do {
         cout << "\t\tMENU\n";
@@ -48,7 +49,7 @@ int main() {
                 break;
             }
             case 5: {
-                getAdressOfTheLastElement(bg);
+                getAddressOfTheLastElement(bg);
                 break;
             }
             case 6: {
@@ -71,9 +72,11 @@ int main() {
                 break;
             }
             case 10: {
+                bg = split(bg, bg2);
                 break;
             }
             case 11: {
+                bg = unite(bg, bg2);
                 break;
             }
             case 12: {
@@ -86,6 +89,7 @@ int main() {
                 break;
             }
             case 15: {
+                eliminateCountries(bg, bg);
                 break;
             }
             case 16: {
