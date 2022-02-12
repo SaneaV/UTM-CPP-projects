@@ -80,12 +80,15 @@ int main() {
                 break;
             }
             case 12: {
+                bg = sort(bg);
                 break;
             }
             case 13: {
+                writeToFile(bg);
                 break;
             }
             case 14: {
+                bg = readFromFile(bg);
                 break;
             }
             case 15: {

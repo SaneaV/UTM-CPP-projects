@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cstring>
+#include <fstream>
 #include "funtionality.h"
 
 using namespace std;
@@ -142,7 +143,6 @@ List *addAtPosition(List *bg) {
             cr = cr->next;
         }
     }
-    return nullptr;
 }
 
 List *addAtFirstPosition(List *bg, struct Country *country) {
@@ -386,12 +386,12 @@ List *split(List *&bg, List *&bg2) {
                 bg2 = cr->next;
                 cr->next = nullptr;
             } else {
-                for (int i = 0; i < length / 2; i++) {
+                for (int i = 0; i < (length - 1) / 2; i++) {
                     cr = cr->next;
                 }
 
-                bg2 = cr;
-                cr = nullptr;
+                bg2 = cr->next;
+                cr->next = nullptr;
             }
 
             cout << "The list was split" << endl;
@@ -449,8 +449,112 @@ List *unite(List *&bg, List *&bg2) {
 
         cr->next = bg2;
         bg2 = nullptr;
-        return cr;
+        return bg;
     }
+}
+
+void writeToFile(List *bg) {
+    if (bg == nullptr) {
+        cout << "The list of countries is empty\n\n";
+    } else {
+        ofstream file;
+        file.open("countries.txt");
+        file << getLength(bg) << "\n";
+
+        List *cr = bg;
+        while (cr != nullptr) {
+            file << cr->country->name << " " << cr->country->capital << " " << cr->country->area << " "
+                 << cr->country->population << " " << cr->country->grossDomesticProduct << "\n";
+            cr = cr->next;
+        }
+
+        cout << "Successfully wrote to countries.txt" << endl;
+        file.close();
+    }
+}
+
+List *readFromFile(List *bg) {
+    if (bg != nullptr) {
+        int choice;
+        cout << "Your list isn't empty. Do you want to rewrite it?" << endl;
+        cout << "1. Yes" << endl;
+        cout << "2. No" << endl;
+        cout << "Input your choice: ";
+        cin >> choice;
+
+        if (choice == 2) {
+            return bg;
+        }
+    }
+
+    ifstream file("countries.txt");
+    if (file.is_open()) {
+        int numberOfCountries = 0;
+        file >> numberOfCountries;
+        if (numberOfCountries == 0) {
+            cout << "Empty file. Returned old list of countries." << endl;
+            return bg;
+        } else {
+            if (bg != nullptr) {
+                eliminateList(bg);
+            }
+            List *prv;
+
+            for (int i = 0; i < numberOfCountries; i++) {
+                auto *country = new Country;
+                file >> country->name >> country->capital >> country->area >> country->population
+                     >> country->grossDomesticProduct;
+
+                List *cr = new List;
+                if (i == 0) {
+                    bg = new List;
+                    bg->country = country;
+                    bg->next = nullptr;
+                    cr = bg;
+                } else {
+                    cr->country = country;
+                    cr->next = nullptr;
+                    prv->next = cr;
+                }
+                prv = cr;
+            }
+            cout << "Successfully read from countries.txt" << endl;
+
+            file.close();
+            return bg;
+        }
+    } else {
+        cout << "There is a problem with countries.txt. We cannot read from this file" << endl;
+        cout << "Returned old list of countries." << endl;
+        return bg;
+    }
+}
+
+List *sort(List *bg) {
+    if (bg == nullptr) {
+        cout << "The list of countries is empty\n\n";
+    } else if (getLength(bg) == 1) {
+        return bg;
+    } else {
+        List *cr = bg->next;
+        List *prv = bg;
+        bool sorted = false;
+
+        while (!sorted) {
+            sorted = true;
+            while (cr != nullptr) {
+                if (strcmp(cr->country->name, prv->country->name) < 0) {
+                    sorted = false;
+                    bg = swapCountries(bg, cr->country->name, prv->country->name);
+                }
+                prv = cr;
+                cr = cr->next;
+            }
+            cr = bg->next;
+            prv = bg;
+        }
+    }
+    return bg;
 }
 
 void eliminateCountries(List *&bg, List *&bg2) {
@@ -459,7 +563,7 @@ void eliminateCountries(List *&bg, List *&bg2) {
     } else {
         eliminateList(bg);
         if (bg2 != nullptr) { eliminateList(bg2); }
-        cout<<"The list was eliminated"<<endl;
+        cout << "The list was eliminated" << endl;
     }
 }
 
@@ -468,12 +572,73 @@ void eliminateList(List *&bg) {
     List *prv;
     while (cr->next != nullptr) {
         prv = cr;
+        cr = cr->next;
         delete[] prv->country;
         prv->country = nullptr;
         delete[] prv;
         prv = nullptr;
-        cr = cr->next;
     }
 
     bg = nullptr;
+}
+
+List *swapCountries(List *bg, char *fCountryName, char *sCountryName) {
+    char firstCountry[50];
+    char secondCountry[50];
+    strcpy(firstCountry, fCountryName);
+    strcpy(secondCountry, sCountryName);
+
+    List *cr = bg;
+
+    List *fCountry = nullptr;
+    List *sCountry = nullptr;
+
+    while (cr->next != nullptr) {
+        if (strcmp(cr->next->country->name, firstCountry) == 0 ||
+            strcmp(cr->next->country->capital, firstCountry) == 0) {
+            fCountry = cr;
+        }
+        if (strcmp(cr->next->country->name, secondCountry) == 0 ||
+            strcmp(cr->next->country->capital, secondCountry) == 0) {
+            sCountry = cr;
+        }
+
+        cr = cr->next;
+    }
+
+    if (sCountry == nullptr && fCountry != nullptr) {
+        sCountry = fCountry;
+        fCountry = nullptr;
+
+        char tempCountry[50];
+        strcpy(tempCountry, firstCountry);
+        strcpy(firstCountry, secondCountry);
+        strcpy(secondCountry, tempCountry);
+    } else if (sCountry->next == fCountry) {
+        List *fTemp = fCountry;
+        fCountry = sCountry;
+        sCountry = fTemp;
+    }
+
+    if (fCountry != nullptr && sCountry != nullptr) {
+        if (fCountry->next == sCountry) {
+            List *fTemp = fCountry->next;
+            fCountry->next = sCountry->next;
+            fTemp->next = sCountry->next->next;
+            fCountry->next->next = fTemp;
+        }
+    } else if (fCountry == nullptr &&
+               (strcmp(bg->country->name, firstCountry) == 0 || strcmp(bg->country->capital, firstCountry) == 0) &&
+               sCountry != nullptr) {
+        List *fTemp = bg;
+        List *sTemp = sCountry->next;
+        List *tTemp = sTemp->next;
+        sTemp->next = fTemp->next;
+        fTemp->next = tTemp;
+        sTemp->next->next = fTemp;
+
+        bg = sTemp;
+    }
+
+    return bg;
 }

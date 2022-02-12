@@ -43,6 +43,8 @@ List *editCountry(List *bg);
 
 List *swapCountries(List *bg);
 
+List *swapCountries(List *bg, char *fCountryName, char *sCountryName);
+
 List *split(List *&bg, List *&bg2);
 
 List *selectSplitList(List *&bg, List *&bg2);
@@ -52,3 +54,9 @@ List *unite(List *&bg, List *&bg2);
 void eliminateCountries(List *&bg, List *&bg2);
 
 void eliminateList(List *&bg);
+
+List *sort(List *bg);
+
+void writeToFile(List *bg);
+
+List *readFromFile(List *bg);
